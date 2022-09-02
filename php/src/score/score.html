@@ -1,0 +1,120 @@
+<?php echo "<?xml version=\"1.0\" ?>\n"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Auswertung Game Show</title>
+<link rel="stylesheet" type="text/css" href="html/auswertung.css" />
+<?php
+if(isset($_GET['which']))
+{
+	echo '<link rel="stylesheet" type="text/css" href="html/score.css" />';
+}
+else
+{
+	echo '<link rel="stylesheet" type="text/css" href="html/score2.css" />';
+}
+?>
+</head>
+<body>
+<h1>Game Show Auswertung</h1>
+<?php
+if(isset($_GET['which']))
+{
+?>
+<p>Spiele absolviert: <?php echo $ct_games; ?></p>
+<?php
+}
+
+$platzierung = 0;
+$points_before = 0;
+$ct_samePlace = 0;
+$i = 1;
+$cut = ceil(NUM_OF_STREETS/2);
+$table = FALSE;
+?>
+<table id="first" 
+<?php
+if(isset($_GET['which']))
+{
+	echo 'style="display:none;">';
+}
+?>
+<tr>
+<th class="klein">#</th>
+<th>Stra&szlig;e</th>
+<th class="klein">Pkt</th>
+<?php
+if(isset($_GET['which']))
+{
+?>
+<th class="klein">+/-</th>
+<?php
+}
+?>
+</tr>
+<?php
+foreach($reihenfolge AS $key => $value)
+{
+	if($points_before == $value)
+	{
+		$ct_samePlace++;
+	}
+	else
+	{
+		$points_before = $value;
+		$platzierung++;
+		if($ct_samePlace)
+		{
+			$platzierung+=$ct_samePlace;
+			$ct_samePlace = 0;
+		}
+	}
+	if($i>$cut AND !$table AND isset($_GET['which']))
+	{
+			echo "</table>\n";
+	
+			echo "<table id=\"last\">\n";
+			echo "<tr>\n";
+			echo "<th class=\"klein\">#</th>\n";
+			echo "<th>Stra&szlig;e</th>\n";
+			echo "<th class=\"klein\">Pkt</th>\n";
+			echo "<th class=\"klein\">+/-</th>\n";
+			echo "</tr>\n";
+			
+			$table = TRUE;
+	}
+	echo "<tr>\n";
+	echo "<td>".$platzierung.".</td>\n";
+	echo "<td>".StreetIdToName($key)."</td>\n";
+	echo "<td>".$value."</td>\n";
+	if(isset($_GET['which']))
+	{
+		echo "<td>\n";
+		if($tendenz[$key] < $platzierung)
+		{
+			echo "<img src=\"html/down.png\" \>";
+		} 
+		elseif($tendenz[$key] > $platzierung)
+		{
+			echo "<img src=\"html/up.png\" \>";
+		}
+		echo "</td>\n";
+	}
+	echo "</tr>\n";
+	$i++;
+}
+?>
+</table>
+<script type="text/javascript">
+document.onkeydown = function(event) {
+	if(event.keyCode == 37) {
+		document.getElementById('last').style.display='block';
+		document.getElementById('last').style.border='10px';
+		document.getElementById('first').style.display='none';
+	}
+	if(event.keyCode == 39) {
+		document.getElementById('last').style.display='none';
+		document.getElementById('first').style.display='block';
+	}
+}
+</script>

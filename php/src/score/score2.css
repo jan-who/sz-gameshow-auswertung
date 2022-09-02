@@ -1,0 +1,74 @@
+
+
+th
+{
+	font-weight: bold;
+}
+
+th, p, h2, td
+{
+	font-size: 1.8em;
+	text-align: center;
+}
+
+h1
+{
+	font-size: 2.8em;
+	text-decoration: underline;
+	text-align: center;
+}
+
+h2.score
+{
+	font-weight: normal;
+}
+
+table
+{
+	margin: auto;
+	
+	border: 1px solid;
+}
+
+table#first
+{
+	border: 0px;
+}
+
+td,
+th
+{
+	text-align: center;
+	border: 1px solid;
+}
+
+th.klein
+{
+	width: 5%;
+}
+
+#logo
+{
+	background-image: url('logo.png');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: 2% 0%;
+	float: left;
+	width: 400px;
+	height: 200px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+a.score
+{
+	color: #000000;
+	border: 0px;
+}
+
+td.joker
+{
+	color: #ff0000;
+	border: 5px #ffffff;
+}

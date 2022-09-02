@@ -1,0 +1,136 @@
+<?php
+/* I N F O S *
+/ result -> Array mit allen Straßennummern und Namen
+/ -		id	 -> Straßennummer
+/ -		name -> Name der Straße
+/ - 	spielart -> bei TRUE Bühnenspiel
+/ -		wertung -> 0 = Punktspiel, 1 = niedrigste Zeit, 2 = höchste Zeit, 3 = Differenz
+*/
+?>
+<?php echo "<?xml version=\"1.0\" ?>\n"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Auswertung Game Show</title>
+<link rel="stylesheet" type="text/css" href="html/auswertung.css" />
+</head>
+<body>
+<h1>Game Show Auswertung</h1>
+<h2>Spielergebnis eintragen</h2>
+<p><?php if(isset($save)) { echo "Gespeichert.<br/>\n"; unset($save); } ?>
+Spiel ausw&auml;hlen:
+</p>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=result">
+<select name="game">
+<?php
+// Alle Spiele darstellen
+while($row = $result->fetch_assoc())
+{
+	if($row['id'] == $game_id)
+	{
+		echo "<option selected=\"selected\">";
+	}
+	else
+	{
+		echo "<option>";
+	}
+	echo $row['id'].": ";
+	echo $row['name'];
+	echo "</option>\n";
+}
+?>
+</select>
+<input type="submit" value="Ausw&auml;hlen" name="game-select" />
+</form>
+<?php
+// Sofern ein Spiel ausgewählt wurde nachfolgendes anzeige
+if(isset($game_id))
+{ ?>
+<h2>Spiel: &bdquo;<?php echo GameIdToName($game_id); ?>&ldquo;</h2>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=result">
+<input type="hidden" name="id" value="<?php echo $game_id; ?>" />
+<table>
+<tr>
+<th>Stra&szlig;ennummer</th>
+<th>Ergebnis</th>
+<th>Auswertungspunkte</th>
+</tr>
+<?php
+while($row = $points->fetch_assoc())
+{
+	echo "<tr>\n";
+	echo "<td class=\"right\">".$row['street_id']."</td>\n";
+	echo "<td>\n";
+	switch($wertung)
+	{
+		case 0:
+			if(!$row['points'])
+			{
+				$row['points'] = 0;
+			}
+			echo "<input type=\"text\" size=\"5\" name=\"".$row['street_id']."\" value=\"".$row['points']."\" /> Pkt\n";
+			if($game_id == 10)
+			{
+				if(!$row['times'] OR $row['times'] == "00:00:00")
+				{
+					$time = "HH:MM:SS";
+				}
+				else
+				{
+					$time = $row['times'];
+				}
+				echo " | <input type=\"text\" size=\"8\" name=\"".$row['street_id']."_2\" value=\"".$time."\" />\n";
+			}
+		break;
+		case 1:
+		case 2:
+			// Abgabezeit oder Laufzeit?
+			if($game_id == 13)
+			{
+				$zeit = "HH:MM:SS";
+			}
+			else
+			{
+				$zeit = "MIN:SEK:MS";
+			}
+			echo "<input type=\"text\" size=\"8\" name=\"".$row['street_id']."\" value=\"".$row['times']."\" /> (".$zeit.")\n";
+		break;
+		case 3:
+			echo "<input type=\"text\" size=\"5\" name=\"".$row['street_id']."\" value=\"".$row['points']."\" />\n";
+			if($game_id == 9)
+			{
+				echo " km/h ";
+			}
+			elseif($game_id == 7)
+			{
+				echo " ml";
+			}
+		break;
+	}
+	echo "| <input type=\"checkbox\" name=\"joker[]\" value=\"".$row['street_id']."\"";
+	if($row['joker'])
+	{
+		echo " checked=\"checked\"";
+	}
+	echo " /> Joker\n";
+	echo "</td>\n";
+	echo "<td>";
+	if($row['joker'])
+	{
+		echo $row['points_new']*(2)." (".$row['points_new'].")";
+	}
+	else
+	{
+		echo $row['points_new'];
+	}
+	echo "</td>\n";
+	echo "</tr>\n";
+}
+echo "</table>\n";
+?>
+<input type="submit" name="result-save" value="Speichern!" />
+</form>
+<?php
+}
+?>
+<p class="back"><a href="<?php echo $_SERVER['PHP_SELF'];?>">zur&uuml;ck</a></p>

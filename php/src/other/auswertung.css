@@ -1,0 +1,65 @@
+﻿@font-face
+{
+	font-family: Trajan;
+	src: url('TrajanPro-Regular.otf');
+}
+
+@font-face
+{
+	font-family: Trajan;
+	font-weight: bold;
+	src: url('TrajanPro-Bold.otf');
+}
+
+@font-face
+{
+	font-family: Futura;
+	src: url('FuturaStd-Book.otf');
+}
+
+h1, h2
+{
+	font-family: Trajan;
+}
+
+p, ul, li, td, th, table, option, input
+{
+	font-family: Futura;
+	font-size: 1.0em;
+}
+
+table, th, td
+{
+	border: 1px solid;
+	border-collapse: collapse;
+}
+
+th
+{
+	width: 20%;
+}
+
+td.right
+{
+	padding-left: 25%;
+}
+
+a
+{
+	color: #333333;
+	text-decoration: none;
+	border-bottom: 1px dotted;
+	border-color: #ff0000;
+}
+
+a:hover
+{
+	text-decoration: underline;
+	border-bottom: 0px;
+}
+
+.back
+{
+	font-size: 0.8em;
+}
+
