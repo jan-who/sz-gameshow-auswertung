@@ -3,15 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Auswertung Game Show</title>
-<link rel="stylesheet" type="text/css" href="html/auswertung.css" />
+<link rel="stylesheet" type="text/css" href="other/auswertung.css" />
 <?php
 if(isset($_GET['which']))
 {
-	echo '<link rel="stylesheet" type="text/css" href="html/score.css" />';
+	echo '<link rel="stylesheet" type="text/css" href="other/score.css" />';
 }
 else
 {
-	echo '<link rel="stylesheet" type="text/css" href="html/score2.css" />';
+	echo '<link rel="stylesheet" type="text/css" href="other/score2.css" />';
 }
 ?>
 </head>
@@ -30,6 +30,7 @@ $points_before = 0;
 $ct_samePlace = 0;
 $i = 1;
 $cut = ceil(NUM_OF_STREETS/2);
+$cut=0; // TODO: Wofür ist das??? Für Javascript unten bei vielen Strassen?
 $table = FALSE;
 ?>
 <table id="first" 
@@ -92,11 +93,11 @@ foreach($reihenfolge AS $key => $value)
 		echo "<td>\n";
 		if($tendenz[$key] < $platzierung)
 		{
-			echo "<img src=\"html/down.png\" \>";
+			echo "<img src=\"other/down.png\" \>";
 		} 
 		elseif($tendenz[$key] > $platzierung)
 		{
-			echo "<img src=\"html/up.png\" \>";
+			echo "<img src=\"other/up.png\" \>";
 		}
 		echo "</td>\n";
 	}

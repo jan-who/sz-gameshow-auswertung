@@ -5,6 +5,9 @@ if(isset($_GET['which']))
 {
 	switch($_GET['which'])
 	{
+		// Für die Tendenz zur vorherigen Platzierung bei der Zwischenauswertung
+		// hier angeben, nach welchem Spiel die Zwischenauswertung erfolgt 
+		// ($ct_games) und wann die letzte Zwischenauswertung war ($ct_zuvor)
 		case 1:
 			$ct_games = 2;
 			$ct_zuvor = 1;
@@ -22,21 +25,20 @@ if(isset($_GET['which']))
 			$ct_zuvor = 0;
 		break;
 	}
-}
-else
-{
+
+} else {
 	$ct_games = NUM_OF_GAMES;
 	$ct_zuvor = 0;
 }
 
 $reihenfolge = array();
-$tmp = array();
+$reihenfolge_zuvor = array();
 
 // Jetziger Spielstand
 for($i=1; $i<=NUM_OF_STREETS; $i++)
 {
-	$reihenfolge[$i] = '';
-	$tmp[$i] 		 = '';
+	$reihenfolge[$i] = 0;
+	$reihenfolge_zuvor[$i] = 0;
 }
 
 // Punkte in Array speichern (Key = Straßen ID, Value = Gesamtpunkt)
@@ -77,21 +79,21 @@ for($i=1; $i<=$ct_zuvor; $i++)
 	{
 		if($row['joker'])
 		{
-			$tmp[$row['street_id']] += $row['points_new']*2;
+			$reihenfolge_zuvor[$row['street_id']] += $row['points_new']*2;
 		}
 		else
 		{
-			$tmp[$row['street_id']] += $row['points_new'];
+			$reihenfolge_zuvor[$row['street_id']] += $row['points_new'];
 		}
 	} 
 }
-arsort($tmp);
+arsort($reihenfolge_zuvor);
 
 $tendenz = array();
 $points_before = 0;
 $ct_samePlace = 0;
 $platzierung = 0;
-foreach($tmp AS $key => $value)
+foreach($reihenfolge_zuvor AS $key => $value)
 {
 	if($points_before == $value)
 	{
@@ -115,5 +117,5 @@ unset($platzierung);
 unset($ct_samePlace);
 unset($points_before);
 
-include 'html/score.html';
+include 'score/score.html';
 ?>

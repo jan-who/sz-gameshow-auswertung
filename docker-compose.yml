@@ -1,6 +1,6 @@
 services:
   sz-gameshow:
-    container_name: php-apache
+    container_name: gameshow-php
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -12,17 +12,17 @@ services:
       - 80:80
 
   sz-gameshow-db:
-      container_name: db
+      container_name: gameshow-db
       platform: linux/x86_64
       image: mysql
       restart: always
       environment:
           MYSQL_ROOT_PASSWORD: testRootPassword
-          MYSQL_DATABASE: local_test
+          MYSQL_DATABASE: gameshow
           MYSQL_USER: testUser
           MYSQL_PASSWORD: testPassword
       volumes:
-          - ./php/database_raw.sql:/docker-entrypoint-initdb.d/database_raw.sql
+          - ./php/database_raw.sql:/docker-entrypoint-initdb.d/database_dump.sql
       ports:
           - "9906:3306"
 

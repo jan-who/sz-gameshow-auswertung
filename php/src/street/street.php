@@ -32,5 +32,5 @@ if($tmp)
 	$result = $tmp;
 }
 
-include 'html/street.html';
+include 'street.html';
 ?>

@@ -5,6 +5,12 @@
 / -		name -> Name der Straße
 / - 	spielart -> bei TRUE Bühnenspiel
 / -		wertung -> 0 = Punktspiel, 1 = niedrigste Zeit, 2 = höchste Zeit, 3 = Differenz
+
+/ Besonderheiten bei den Spielen:
+/ Spiel 7/9: Unterschiedliche Anzeige (ml und km/h)
+/ Spiel 10: Meiste Punkte, bei Gleichstand kürzeste Zeit
+/ Spiel 13: Statt Minuten, hier die Wertung in Stunden
+
 */
 ?>
 <?php echo "<?xml version=\"1.0\" ?>\n"; ?>
@@ -12,7 +18,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Auswertung Game Show</title>
-<link rel="stylesheet" type="text/css" href="html/auswertung.css" />
+<link rel="stylesheet" type="text/css" href="other/auswertung.css" />
 </head>
 <body>
 <h1>Game Show Auswertung</h1>

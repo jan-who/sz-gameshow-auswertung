@@ -62,5 +62,5 @@ else
 	$result = $db->query($sql);
 }
 
-include 'html/score_game.html';
+include 'score/score_game.html';
 ?>

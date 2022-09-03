@@ -303,5 +303,5 @@ if(isset($game_id))
 	}
 }
 				
-include 'html/result.html';
+include 'result/result.html';
 ?>

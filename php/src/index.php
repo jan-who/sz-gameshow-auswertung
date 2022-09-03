@@ -1,7 +1,7 @@
 <?php
 // Anzahl an Straßen
-define('NUM_OF_STREETS', 20);
-define('NUM_OF_GAMES', 13);
+define('NUM_OF_STREETS', 3);
+define('NUM_OF_GAMES', 2);
 define('NUM_SYMBOLE', 11);
 define('NUM_ZIELTRINKEN', 225);
 define('NUM_SCHUSS', 33);
@@ -9,7 +9,7 @@ define('NUM_SCHUSS', 33);
 // Verbindung SQL Server
 function new_db()
 {
-	$db = new mysqli('localhost', 'root', '', 'gameshow');
+	$db = @new mysqli('sz-gameshow-db', 'testUser', 'testPassword', 'gameshow');
 	if(mysqli_connect_errno())
 	{
 		die('Konnte keine Verbindung zur SQL Datenbank herstellen.<br />'.mysqli_connect_error().'
@@ -117,29 +117,29 @@ if(isset($_GET) AND isset($_GET['page']))
 	{
 		case 'street':
 			// Änderung Straßen
-			include 'street.php';
+			include 'street/street.php';
 		break;
 		case 'result':
 			// Spielergebnis eintragen
-			include 'result.php';
+			include 'result/result.php';
 			break;
 		case 'score_game':
 			// Einzelwertung
-			include 'score_game.php';
+			include 'score/score_game.php';
 			break;
 		case 'score':
 			// Gesamtwertung
-			include 'score.php';
+			include 'score/score.php';
 			break;
 		default:
 			// Startseite
-			include 'html/index.html';
+			include 'index.html';
 		break;
 	}
 }
 else
 {
-	include 'html/index.html';
+	include 'index.html';
 }
 
 // Ende Grundgerüst HTML Datei
