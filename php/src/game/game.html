@@ -1,0 +1,53 @@
+<?php
+/* I N F O S *
+/ result -> Array mit allen Straßennummern und Namen
+/ -		id	        -> Spielnummer, unveränderlich
+/ -		name        -> Kurzbeschreibung / Name, veränderlich
+/ -     game_mode   -> Nummer für den Auswertungsmodus, veränderlich
+/ -     diff_time   -> Zeit für Differenzberechnung (falls im Spielmodus erforderlich, sonst leer)
+/ -     diff_points -> Punkte für Differenzberechnung (falls im Spielmodus erforderlich, sonst leer)
+*/
+echo "<?xml version=\"1.0\" ?>\n"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Auswertung Game Show</title>
+<link rel="stylesheet" type="text/css" href="other/auswertung.css" />
+</head>
+<body>
+<h1>Game Show Auswertung</h1>
+<h2>Anzahl Stra&szlig;en</h2>
+<p><?php if(isset($save_nums)) { echo "Gespeichert.<br />\n"; unset($save_nums); } ?>
+	Anzahl an Spielen: 
+</p>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?page=game">
+	<input type="text" name="num_games" value="<?php echo $count; ?>" />
+	<input type="submit" value="Speichern" name="submit_num_games" />
+</form>
+
+<h2>Spiele &auml;ndern</h2>
+<p><?php if(isset($save_names)) { echo "Gespeichert.<br />\n"; unset($save_names); } ?>
+Spielnamen und Bewertungsmodus k&ouml;nnen hier angepasst werden:
+</p>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=game">
+	<table class="street">
+		<tr>
+			<th>Spiel-ID</th>
+			<th>Name</th>
+            <th>Spielmodus</th>
+<?php
+while($row = $games->fetch_assoc())
+{
+	echo "<tr>\n";
+	echo "	<td>".$row['game_id']."</td>\n";
+	echo "	<td>";
+	echo '		<input type="text" name="'.$row['game_id'].'" value="'.$row['name'].'" size="60" />';
+	echo "	</td>\n";
+    echo game_mode_selection($game_mode, $row['game_id'], $row['game_mode']);
+	echo "</tr>\n";
+}
+?>
+	</table>
+	<input type="submit" value="Speichern" name="submit_game_save" />
+</form>
+<p class="back"><a href="<?php echo $_SERVER['PHP_SELF'];?>">zur&uuml;ck</a></p>

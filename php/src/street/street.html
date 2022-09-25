@@ -13,27 +13,38 @@ echo "<?xml version=\"1.0\" ?>\n"; ?>
 </head>
 <body>
 <h1>Game Show Auswertung</h1>
+
+<h2>Anzahl Stra&szlig;en</h2>
+<p><?php if(isset($save_nums)) { echo "Gespeichert.<br />\n"; unset($save_nums); } ?>
+	Anzahl an teilnehmenden Stra&szlig;en: 
+</p>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?page=street">
+	<input type="text" name="num_streets" value="<?php echo $count; ?>" />
+	<input type="submit" value="Speichern" name="submit_num_streets" />
+</form>
+
 <h2>Stra&szlig;ennamen &auml;ndern</h2>
-<p><?php if(isset($save)) { echo "Gespeichert.<br />\n"; unset($save); } ?>
-Bei der Stra&szlig;e den jeweilige Namen zur passenden Nummer eintragen.</p>
+<p><?php if(isset($save_names)) { echo "Gespeichert.<br />\n"; unset($save_names); } ?>
+Bei der Stra&szlig;e den jeweilige Namen zur passenden Nummer eintragen.
+</p>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=street">
-<table class="street">
-<tr>
-<th>Stra&szlig;ennummer</th>
-<th>Stra&szlig;enname</th>
+	<table class="street">
+		<tr>
+			<th>Stra&szlig;ennummer</th>
+			<th>Stra&szlig;enname</th>
 <?php
 // Ausgabe der Daten (s.o.) per While-Schleife
 while($row = $result->fetch_assoc())
 {
 	echo "<tr>\n";
-	echo "<td>".$row['street_id']."</td>\n";
-	echo "<td>";
-	echo "<input type=\"text\" name=\"".$row['street_id']."\" value=\"".$row['name']."\" />";
-	echo "</td>\n";
+	echo "	<td>".$row['street_id']."</td>\n";
+	echo "	<td>";
+	echo "		<input type=\"text\" name=\"".$row['street_id']."\" value=\"".$row['name']."\" />";
+	echo "	</td>\n";
 	echo "</tr>\n";
 }
 ?>
-</table>
-<input type="submit" value="Speichern" name="street_save" />
+	</table>
+	<input type="submit" value="Speichern" name="submit_street_save" />
 </form>
 <p class="back"><a href="<?php echo $_SERVER['PHP_SELF'];?>">zur&uuml;ck</a></p>
