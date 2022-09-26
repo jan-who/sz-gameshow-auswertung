@@ -4,12 +4,18 @@ if(isset($_POST)) {
 	if (isset($_POST['submit_game_save'])) {
 		$i=1;
 		while(isset($_POST[$i])) {
-            $game_mode = $_POST['select_game_mode_'.$i];
+			$game_mode = (int) $_POST['select_game_mode_'.$i];
+			
+			$diff_points = NULL;
+			if(isset($_POST['diff_'.$i]) && $game_mode == 6) {
+				$diff_points = (int) $_POST['diff_'.$i];
+			}
+            
 			$sql = "UPDATE games
-					SET name = ?, game_mode = ?, diff_time = NULL, diff_points = NULL
+					SET name = ?, game_mode = ?, diff_points = ?
 					WHERE game_id = ?";
 			$stmt = $db->prepare($sql);
-			$stmt->bind_param('sii', $_POST[$i], $game_mode, $i);
+			$stmt->bind_param('siii', $_POST[$i], $game_mode, $diff_points, $i);
 			$stmt->execute();
 			$stmt->close();
 
@@ -35,7 +41,7 @@ if(isset($_POST)) {
 		// add more rows, if streets should be more
 		elseif($num_games > $current_games) {
 			for ($i=0; $i<($num_games-$current_games); $i++) {
-				$sql = "INSERT INTO games VALUES (".($i+1+$current_games).", '', 0, NULL, NULL)";
+				$sql = "INSERT INTO games (game_id, name, game_mode, diff_points) VALUES (".($i+1+$current_games).", '', 0, NULL)";
 				$db->query($sql);
 			}
 		}

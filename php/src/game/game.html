@@ -4,7 +4,6 @@
 / -		id	        -> Spielnummer, unveränderlich
 / -		name        -> Kurzbeschreibung / Name, veränderlich
 / -     game_mode   -> Nummer für den Auswertungsmodus, veränderlich
-/ -     diff_time   -> Zeit für Differenzberechnung (falls im Spielmodus erforderlich, sonst leer)
 / -     diff_points -> Punkte für Differenzberechnung (falls im Spielmodus erforderlich, sonst leer)
 */
 echo "<?xml version=\"1.0\" ?>\n"; ?>
@@ -35,6 +34,7 @@ Spielnamen und Bewertungsmodus k&ouml;nnen hier angepasst werden:
 			<th>Spiel-ID</th>
 			<th>Name</th>
             <th>Spielmodus</th>
+			<th>Zielwert</th>
 <?php
 while($row = $games->fetch_assoc())
 {
@@ -44,6 +44,11 @@ while($row = $games->fetch_assoc())
 	echo '		<input type="text" name="'.$row['game_id'].'" value="'.$row['name'].'" size="60" />';
 	echo "	</td>\n";
     echo game_mode_selection($game_mode, $row['game_id'], $row['game_mode']);
+	echo "	<td>";
+	if($row['game_mode'] == 6) {
+		echo '		<input type="text" name="diff_'.$row['game_id'].'" value="'.$row['diff_points'].'" />';
+	}
+	echo "	</td>\n";
 	echo "</tr>\n";
 }
 ?>

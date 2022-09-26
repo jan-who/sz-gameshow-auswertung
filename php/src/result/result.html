@@ -38,6 +38,7 @@ if(isset($game_id)) {
 <p>Spielmodus: <?php echo $game['game_mode_text']; ?></p>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=result">
 <input type="hidden" name="game_id" value="<?php echo $game['game_id']; ?>" />
+<input type="hidden" name="game_mode" value="<?php echo $game['game_mode']; ?>" />
 <table>
 	<tr>
 		<th>Stra&szlig;e</th>
@@ -81,6 +82,7 @@ while($row = $game['streets']->fetch_assoc())
 	} else {
 		echo '  <td><input type="checkbox" name="'.$street_id.'_joker" /></td>';
 	}
+	echo "  <td>".$game['scores'][$street_id]['gameshow_points']."</td>\n";
 	echo "</tr>\n";
 }
 ?>

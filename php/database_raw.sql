@@ -33,7 +33,6 @@ CREATE TABLE `games` (
   `game_id` tinyint NOT NULL,
   `name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `game_mode` tinyint(1) NOT NULL DEFAULT '1',
-  `diff_time` time DEFAULT NULL,
   `diff_points` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -41,10 +40,10 @@ CREATE TABLE `games` (
 -- Daten für Tabelle `games`
 --
 
-INSERT INTO `games` (`game_id`, `name`, `game_mode`, `diff_time`, `diff_points`) VALUES
-(1, 'Testspiel A', 1, NULL, NULL),
-(2, 'Testspiel B', 2, NULL, NULL),
-(3, 'Testspiel C', 3, NULL, NULL);
+INSERT INTO `games` (`game_id`, `name`, `game_mode`, `diff_points`) VALUES
+(1, 'Testspiel A', 1, NULL),
+(2, 'Testspiel B', 2, NULL),
+(3, 'Testspiel C', 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -67,8 +66,7 @@ INSERT INTO `game_mode` (`id`, `description`) VALUES
 (3, 'Punktespiel, niedrigste Punktzahl gewinnt (kein Tie-Braker)'),
 (4, 'Zeitspiel, schnellste Zeit gewinnt'),
 (5, 'Zeitspiel, höchste Zeit gewinnt'),
-(6, 'Punkte-Differenzspiel, niedrigste absolute Abweichung gewinnt'),
-(7, 'Zeit-Differenzspiel, niedrigste absolute Abweichung gewinnt');
+(6, 'Punkte-Differenzspiel, niedrigste absolute Abweichung gewinnt');
 
 -- --------------------------------------------------------
 
@@ -81,14 +79,15 @@ CREATE TABLE `scores` (
   `game_id` tinyint NOT NULL,
   `points` smallint DEFAULT NULL,
   `time` time DEFAULT NULL,
-  `joker` tinyint(1) NOT NULL
+  `joker` tinyint(1) NOT NULL,
+  `gameshow_points`tinyint,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Daten für Tabelle `scores`
 --
 
-INSERT INTO `scores` (`street_id`, `game_id`, `points`, `time`, `joker`) VALUES
+INSERT INTO `scores` (`street_id`, `game_id`, `points`, `time`, `joker`, `gameshow_points`) VALUES
 (1, 1, 9, NULL, 1),
 (2, 1, 8, NULL, 0),
 (3, 1, 7, NULL, 0),
