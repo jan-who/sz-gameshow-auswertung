@@ -5,8 +5,7 @@
 <title>Auswertung Game Show</title>
 <link rel="stylesheet" type="text/css" href="other/auswertung.css" />
 <?php 
-if(!$auswahl)
-{
+if(!$auswahl) {
 ?>
 </head>
 <body>
@@ -20,53 +19,48 @@ if(!$auswahl)
 while($row = $result->fetch_assoc())
 {
 	echo "<li>";
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?page=score_game&uid=".$row['id']."\" >".$row['name']."</a>";
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?page=score_game&uid=".$row['game_id']."\" >".$row['name']."</a>";
 	echo "</li>\n";
 }
 ?>
 </ul>
 <?php
-}
-else
-{ 
+} else { 
 ?>
 <link rel="stylesheet" type="text/css" href="other/score.css" />
 </head>
 <body>
 <h1 class="score">Game Show Auswertung</h1>
-<p><?php echo $name; ?></p>
+<p><?php echo $game_name; ?></p>
 <?php
 $platzierung = 0;
 $points_before = 0;
 $ct_samePlace = 0;
 $i = 1;
-$cut = ceil(NUM_OF_STREETS/2);
+$cut = ceil($total_rows/2);
 $table = FALSE;
 ?>
 <table id="first" >
 <tr>
 <th class="klein">#</th>
 <th>Stra&szlig;e</th>
-<th class="klein">Ergebnis</th>
-<th class="klein">Auswertungspunkte</th>
+<th class="klein">Punkte</th>
+<th class="klein">Zeiten</th>
+<th class="klein">Gameshow Punkte</th>
 </tr>
 <?php
-	foreach($reihenfolge AS $key => $value)
-	{
-		if($points_before == $value)
-		{
+	foreach($reihenfolge AS $key => $value)	{
+		if($points_before == $value) {
 			$ct_samePlace++;
-		}
-		else
-		{
+		} else {
 			$points_before = $value;
 			$platzierung++;
-			if($ct_samePlace)
-			{
+			if($ct_samePlace) {
 				$platzierung+=$ct_samePlace;
 				$ct_samePlace = 0;
 			}
 		}
+
 		/*if($i>$cut AND !$table)
 		{
 				echo "</table>\n";
@@ -81,36 +75,16 @@ $table = FALSE;
 				
 				$table = TRUE;
 		}*/
+
 		echo "<tr>\n";
 		echo "<td>".$platzierung.".</td>\n";
-		echo "<td>".StreetIdToName($key)."</td>\n";
+		echo "<td>".$key."</td>\n";
+		echo "<td>".$value['points']."</td>\n";
+		echo "<td>".$value['time']."</td>\n";
 		echo "<td>";
-		if(!$game_points[$key]['points'])
-		{
-			$game_points[$key]['points'] = 0;
-		}
-		echo $game_points[$key]['points'];
-		if($wertung == 3)
-		{
-			if($auswahl == 7)
-			{
-				echo " (&#916; ".abs($game_points[$key]['points']-NUM_ZIELTRINKEN).")";
-			}
-			elseif($auswahl == 9)
-			{
-				echo " (&#916; ".abs($game_points[$key]['points']-NUM_SCHUSS).")";
-			}
-			elseif($auswahl == 12)
-			{
-				echo " (&#916; ".abs($game_points[$key]['points']-NUM_SYMBOLE).")";
-			}
-		} 
-		echo "</td>\n";
-		echo "<td>\n";
-		echo $value;
-		if($game_points[$key]['joker'])
-		{
-			echo " (".$value/(2).")";
+		echo $value['total_points'];
+		if ($value['joker'] == 1) {
+			echo " (".($value['total_points']/2).")";
 		}
 		echo "</td>\n";
 		echo "</tr>\n";
