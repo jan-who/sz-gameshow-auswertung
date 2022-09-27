@@ -1,93 +1,56 @@
 <?php
+$sql = "SELECT COUNT(*) AS anzahl FROM games";
+$result = $db->query($sql);
+$games = $result->fetch_assoc();
+$total_games = $games['anzahl'];
+$ct_games = $total_games;
+$ct_zuvor = 1;
+
 // Alle Auswertungspunkte auslesen
 // Dummy Array mit Werten füllen
-if(isset($_GET['which']))
+if(isset($_GET['game']) && isset($_GET['trend']))
 {
-	switch($_GET['which'])
-	{
-		// Für die Tendenz zur vorherigen Platzierung bei der Zwischenauswertung
-		// hier angeben, nach welchem Spiel die Zwischenauswertung erfolgt 
-		// ($ct_games) und wann die letzte Zwischenauswertung war ($ct_zuvor)
-		case 1:
-			$ct_games = 2;
-			$ct_zuvor = 1;
-		break;
-		case 2:
-			$ct_games = 5;
-			$ct_zuvor = 2;
-		break;
-		case 3:
-			$ct_games = 7;
-			$ct_zuvor = 5;
-		break;
-		default:
-			$ct_games = NUM_OF_GAMES;
-			$ct_zuvor = 0;
-		break;
-	}
-
-} else {
-	$ct_games = NUM_OF_GAMES;
-	$ct_zuvor = 0;
+	$ct_games = (int) $_GET['game'];
+	$ct_zuvor = (int) $_GET['trend'];
 }
 
 $reihenfolge = array();
 $reihenfolge_zuvor = array();
 
-// Jetziger Spielstand
-for($i=1; $i<=NUM_OF_STREETS; $i++)
-{
-	$reihenfolge[$i] = 0;
-	$reihenfolge_zuvor[$i] = 0;
-}
-
 // Punkte in Array speichern (Key = Straßen ID, Value = Gesamtpunkt)
-for($i=1; $i<=$ct_games; $i++)
+$sql = "SELECT street.name, SUM(scores.gameshow_points) AS total_points 
+		FROM scores
+		INNER JOIN street ON scores.street_id = street.street_id
+		WHERE scores.game_id <= ?
+		GROUP BY 1
+		ORDER BY 2 DESC";
+$stmt = $db->prepare($sql);
+$stmt->bind_param('i', $ct_games);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($street_name, $total_points);
+while($stmt->fetch())
 {
-	$db_game = "game".$i;
-	$sql = "SELECT
-				*
-			FROM
-				".$db_game."";
-	$results[$i] = $db->query($sql);
-	
-	while($row = $results[$i]->fetch_assoc())
-	{
-		if($row['joker'])
-		{
-			$reihenfolge[$row['street_id']] += $row['points_new']*2;
-		}
-		else
-		{
-			$reihenfolge[$row['street_id']] += $row['points_new'];
-		}
-	} 
+	$reihenfolge[$street_name] = $total_points;
 }
-arsort($reihenfolge);
+$stmt->close();
 
-// Spielstand 1 Spiel zuvor (für Tendenz)
-for($i=1; $i<=$ct_zuvor; $i++)
-{
-	$db_game = "game".$i;
-	$sql = "SELECT
-				*
-			FROM
-				".$db_game."";
-	$results[$i] = $db->query($sql);
-	
-	while($row = $results[$i]->fetch_assoc())
-	{
-		if($row['joker'])
-		{
-			$reihenfolge_zuvor[$row['street_id']] += $row['points_new']*2;
-		}
-		else
-		{
-			$reihenfolge_zuvor[$row['street_id']] += $row['points_new'];
-		}
-	} 
+// Spielstand 1 Auswertung zuvor (für Tendenz)
+$sql = "SELECT street.name, SUM(scores.gameshow_points) AS total_points 
+		FROM scores
+		INNER JOIN street ON scores.street_id = street.street_id
+		WHERE scores.game_id <= ?
+		GROUP BY 1
+		ORDER BY 2 DESC";
+$stmt = $db->prepare($sql);
+$stmt->bind_param('i', $ct_zuvor);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($street_name, $total_points);
+while($stmt->fetch()) {
+	$reihenfolge_zuvor[$street_name] = $total_points;
 }
-arsort($reihenfolge_zuvor);
+$stmt->close();
 
 $tendenz = array();
 $points_before = 0;
@@ -95,16 +58,12 @@ $ct_samePlace = 0;
 $platzierung = 0;
 foreach($reihenfolge_zuvor AS $key => $value)
 {
-	if($points_before == $value)
-	{
+	if($points_before == $value) {
 		$ct_samePlace++;
-	}
-	else
-	{
+	} else {
 		$points_before = $value;
 		$platzierung++;
-		if($ct_samePlace)
-		{
+		if($ct_samePlace) {
 			$platzierung+=$ct_samePlace;
 			$ct_samePlace = 0;
 		}

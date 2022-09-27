@@ -5,12 +5,9 @@
 <title>Auswertung Game Show</title>
 <link rel="stylesheet" type="text/css" href="other/auswertung.css" />
 <?php
-if(isset($_GET['which']))
-{
+if(isset($_GET['which'])) {
 	echo '<link rel="stylesheet" type="text/css" href="other/score.css" />';
-}
-else
-{
+} else {
 	echo '<link rel="stylesheet" type="text/css" href="other/score2.css" />';
 }
 ?>
@@ -18,25 +15,21 @@ else
 <body>
 <h1>Game Show Auswertung</h1>
 <?php
-if(isset($_GET['which']))
-{
-?>
-<p>Spiele absolviert: <?php echo $ct_games; ?></p>
-<?php
+if(isset($_GET['game']) && isset($_GET['trend'])) {
+	echo "<p>Spiele absolviert: ".$ct_games."</p>\n";
 }
 
 $platzierung = 0;
 $points_before = 0;
 $ct_samePlace = 0;
 $i = 1;
-$cut = ceil(NUM_OF_STREETS/2);
+$cut = ceil($total_games/2);
 $cut=0; // TODO: Wofür ist das??? Für Javascript unten bei vielen Strassen?
 $table = FALSE;
 ?>
 <table id="first" 
 <?php
-if(isset($_GET['which']))
-{
+if(isset($_GET['game']) AND isset($_GET['trend'])) {
 	echo 'style="display:none;">';
 }
 ?>
@@ -45,8 +38,7 @@ if(isset($_GET['which']))
 <th>Stra&szlig;e</th>
 <th class="klein">Pkt</th>
 <?php
-if(isset($_GET['which']))
-{
+if(isset($_GET['game']) && isset($_GET['trend'])) {
 ?>
 <th class="klein">+/-</th>
 <?php
@@ -54,24 +46,19 @@ if(isset($_GET['which']))
 ?>
 </tr>
 <?php
-foreach($reihenfolge AS $key => $value)
-{
-	if($points_before == $value)
-	{
+foreach($reihenfolge AS $key => $value) {
+	if($points_before == $value) {
 		$ct_samePlace++;
-	}
-	else
-	{
+	} else {
 		$points_before = $value;
 		$platzierung++;
-		if($ct_samePlace)
-		{
+		if($ct_samePlace) {
 			$platzierung+=$ct_samePlace;
 			$ct_samePlace = 0;
 		}
 	}
-	if($i>$cut AND !$table AND isset($_GET['which']))
-	{
+
+	if($i>$cut AND !$table AND (isset($_GET['game']) AND isset($_GET['trend']))) {
 			echo "</table>\n";
 	
 			echo "<table id=\"last\">\n";
@@ -84,19 +71,17 @@ foreach($reihenfolge AS $key => $value)
 			
 			$table = TRUE;
 	}
+
 	echo "<tr>\n";
 	echo "<td>".$platzierung.".</td>\n";
-	echo "<td>".StreetIdToName($key)."</td>\n";
+	echo "<td>".$key."</td>\n";
 	echo "<td>".$value."</td>\n";
-	if(isset($_GET['which']))
-	{
+
+	if(isset($_GET['game']) && isset($_GET['trend'])) {
 		echo "<td>\n";
-		if($tendenz[$key] < $platzierung)
-		{
+		if($tendenz[$key] < $platzierung) {
 			echo "<img src=\"other/down.png\" \>";
-		} 
-		elseif($tendenz[$key] > $platzierung)
-		{
+		} elseif($tendenz[$key] > $platzierung) {
 			echo "<img src=\"other/up.png\" \>";
 		}
 		echo "</td>\n";
