@@ -35,13 +35,6 @@ table#first
 	border: 0px;
 }
 
-td,
-th
-{
-	text-align: center;
-	border: 1px solid;
-}
-
 th.klein
 {
 	width: 5%;

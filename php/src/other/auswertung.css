@@ -30,8 +30,14 @@ p, ul, li, td, th, table, option, input
 
 table, th, td
 {
-	border: 1px solid;
+	border: 2px solid;
 	border-collapse: collapse;
+}
+
+th, td 
+{
+	text-align: center;
+	font-weight: bold;
 }
 
 th
