@@ -29,7 +29,7 @@ USE `gameshow`;
 -- Tabellenstruktur für Tabelle `games`
 --
 
-CREATE TABLE `games` (
+CREATE TABLE IF NOT EXISTS `games` (
   `game_id` tinyint NOT NULL,
   `name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `game_mode` tinyint(1) NOT NULL DEFAULT '1',
@@ -40,6 +40,7 @@ CREATE TABLE `games` (
 -- Daten für Tabelle `games`
 --
 
+TRUNCATE TABLE `games`;
 INSERT INTO `games` (`game_id`, `name`, `game_mode`, `diff_points`) VALUES
 (1, 'Testspiel A', 1, NULL),
 (2, 'Testspiel B', 2, NULL),
@@ -51,7 +52,7 @@ INSERT INTO `games` (`game_id`, `name`, `game_mode`, `diff_points`) VALUES
 -- Tabellenstruktur für Tabelle `game_mode`
 --
 
-CREATE TABLE `game_mode` (
+CREATE TABLE IF NOT EXISTS `game_mode` (
   `id` tinyint NOT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -60,6 +61,7 @@ CREATE TABLE `game_mode` (
 -- Daten für Tabelle `game_mode`
 --
 
+TRUNCATE TABLE `game_mode`;
 INSERT INTO `game_mode` (`id`, `description`) VALUES
 (1, 'Punktespiel, höchste Punktzahl gewinnt (kein Tie-Braker)'),
 (2, 'Punktspiel, höchste Punktzahl gewinnt (niedrigste Zeit als Tie-Braker)'),
@@ -74,26 +76,27 @@ INSERT INTO `game_mode` (`id`, `description`) VALUES
 -- Tabellenstruktur für Tabelle `scores`
 --
 
-CREATE TABLE `scores` (
+CREATE TABLE IF NOT EXISTS `scores` (
   `street_id` tinyint NOT NULL,
   `game_id` tinyint NOT NULL,
   `points` smallint DEFAULT NULL,
   `time` time DEFAULT NULL,
   `joker` tinyint(1) NOT NULL,
-  `gameshow_points`tinyint,
+  `gameshow_points`tinyint
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Daten für Tabelle `scores`
 --
 
+TRUNCATE TABLE `scores`;
 INSERT INTO `scores` (`street_id`, `game_id`, `points`, `time`, `joker`, `gameshow_points`) VALUES
-(1, 1, 9, NULL, 1),
-(2, 1, 8, NULL, 0),
-(3, 1, 7, NULL, 0),
-(1, 2, 0, NULL, 0),
-(2, 2, 0, NULL, 0),
-(3, 2, 0, NULL, 0);
+(1, 1, 9, NULL, 1, NULL),
+(2, 1, 8, NULL, 0, NULL),
+(3, 1, 7, NULL, 0, NULL),
+(1, 2, 0, NULL, 0, NULL),
+(2, 2, 0, NULL, 0, NULL),
+(3, 2, 0, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,7 +104,7 @@ INSERT INTO `scores` (`street_id`, `game_id`, `points`, `time`, `joker`, `gamesh
 -- Tabellenstruktur für Tabelle `street`
 --
 
-CREATE TABLE `street` (
+CREATE TABLE IF NOT EXISTS `street` (
   `street_id` tinyint NOT NULL,
   `name` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -110,6 +113,7 @@ CREATE TABLE `street` (
 -- Daten für Tabelle `street`
 --
 
+TRUNCATE TABLE `street`;
 INSERT INTO `street` (`street_id`, `name`) VALUES
 (1, 'A'),
 (2, 'B'),
